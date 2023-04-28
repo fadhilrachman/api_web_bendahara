@@ -50,3 +50,17 @@ export const updateData = async (
     next(error);
   }
 };
+export const deleteData = async (
+  req: Request<{ id: string }, {}, {}>,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+  try {
+    const data = await Pengeluaran.findByIdAndDelete(id);
+    if (!data) return res.status(404).json({ message: "id error" });
+    responCreate(res, 200, "succes delete data", data);
+  } catch (error) {
+    next(error);
+  }
+};
