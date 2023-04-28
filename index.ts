@@ -2,6 +2,7 @@ import express from "express";
 import db from "./database/index.js";
 import userRouter from "./api/user/router";
 import pemasukanRouter from "./api/pemasukan/router";
+import pengeluaranRouter from "./api/pengeluaran/router";
 
 const app = express();
 
