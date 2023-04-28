@@ -13,6 +13,7 @@ db.on("open", () => {
   });
   app.use(userRouter);
   app.use(pemasukanRouter);
+  app.use(pengeluaranRouter);
 });
 
 db.on("error", () => {
