@@ -7,4 +7,5 @@ router.get("/pemasukan", verifyToken, getAllData);
 router.post("/pemasukan", verifyToken, createData);
 router.put("/pemasukan/:id", verifyToken, updateData);
 router.delete("/pemasukan/:id", verifyToken, deleteData);
+
 export default router;
