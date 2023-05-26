@@ -12,25 +12,36 @@ interface ReqBody {
 export const getAllData = async (
   req: Request<
     {},
-    { limit: number; page: number; search: string; tanggal: string },
+    {
+      limit: number;
+      page: number;
+      search: string;
+      tanggal: string;
+      kategori: string;
+    },
     {}
   >,
   res: Response,
   next: NextFunction
 ) => {
-  const { limit, page, search = "", tanggal = "" } = req.query;
-  const startDate = new Date(tanggal); // Tanggal mulai rentang
+  const { limit, page, search, tanggal, kategori } = req.query;
+  const startDate = new Date(tanggal);
   const endDate = new Date();
   let filter: any = {};
 
-  if (tanggal) {
-    filter.tanggal = { $gte: startDate, $lte: endDate };
+  switch (true) {
+    case !!tanggal:
+      filter.tanggal = { $gte: startDate, $lte: endDate };
+      break;
+    case !!search:
+      filter.search = { $regex: search, $options: "i" };
+      break;
+    case !!kategori:
+      filter.kategori = kategori;
+      break;
+    default:
+      break;
   }
-  if (search) {
-    filter.tanggal = { $regex: search, $options: "i" };
-  }
-  console.log({ filter });
-
   try {
     const data = await Pemasukan.find(filter)
       .sort({ tanggal: -1 })

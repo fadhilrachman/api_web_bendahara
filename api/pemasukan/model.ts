@@ -12,7 +12,11 @@ const pemasukanSchema = new mongoose.Schema(
     },
     deskripsi: {
       type: String,
-      required: true,
+    },
+    kategori: {
+      type: String,
+      enum: ["primary", "gift"],
+      requred: true,
     },
   },
   {
