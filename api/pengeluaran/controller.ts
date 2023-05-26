@@ -1,7 +1,7 @@
 import Pengeluaran from "./model";
 import { Request, Response, NextFunction } from "express";
 import { responGet, responCreate } from "../../utils/respon";
-
+import createPagination from "../../utils/pagination";
 interface ReqBody {
   tanngal: string;
   total_pengeluaran: number;
@@ -9,13 +9,19 @@ interface ReqBody {
 }
 
 export const getAllData = async (
-  req: Request,
+  req: Request<{}, { limit: number; page: number }, {}>,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const data = await Pengeluaran.find();
-    responGet(res, 200, "succes get data", data);
+    const { limit, page } = req.query;
+
+    const data = await Pengeluaran.find().limit(2);
+    const count = await Pengeluaran.count();
+    const total_page = Math.ceil(count / limit);
+    const pagination = createPagination(page, total_page);
+
+    responGet(res, 200, "succes get data", data, count, pagination);
   } catch (error) {
     next(error);
   }

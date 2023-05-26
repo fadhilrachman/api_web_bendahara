@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const pemasukanSchema = new mongoose.Schema(
   {
     tanggal: {
-      type: String,
+      type: Date,
       required: true,
     },
     total_pemasukan: {

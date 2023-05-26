@@ -18,14 +18,14 @@ interface Login {
   password: string;
 }
 
-const getAllData = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const data = await User.find();
-    responGet(res, 200, "succes get data", data);
-  } catch (error) {
-    next(error);
-  }
-};
+// const getAllData = async (req: Request, res: Response, next: NextFunction) => {
+//   try {
+//     const data = await User.find();
+//     responGet(res, 200, "succes get data", data);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
 const createData = async (
   req: Request<{}, {}, Register>,
@@ -78,13 +78,10 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
           { token },
           { new: true }
         );
-        res.cookie("token", token, {
-          httpOnly: true,
-          maxAge: 24 * 60 * 60 * 1000,
-        });
-        res.json({ message: "login success", user });
+
+        res.json({ message: "login success", token });
       } else {
-        res.status(200).json({ message: "login error" });
+        res.status(400).json({ message: "password atau email salah" });
       }
     });
   } catch (error) {
@@ -92,4 +89,28 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-module.exports = { getAllData, createData, login };
+const logout = async (req: Request, res: Response, next: NextFunction) => {
+  const token = req.headers["authorization"];
+  if (!token) return res.sendStatus(401);
+
+  try {
+    jwt.verify(
+      token,
+      "aaofnasfasd.1ef.24tredr4t2redc42te",
+      async (err, decode) => {
+        if (err) return res.sendStatus(403);
+
+        const user = await User.findOneAndUpdate(
+          { email: decode.email },
+          { token: null },
+          { new: true }
+        );
+        res.status(200).json({ message: "succes logout", user });
+      }
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { createData, login, logout };
