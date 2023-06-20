@@ -15,9 +15,9 @@ const pengeluaranSchema = new mongoose.Schema(
       required: true,
     },
     kategori: {
-      type: String,
-      enum: ["primary", "snacking", "invest"],
-      requred: true,
+      type: mongoose.Types.ObjectId,
+      ref: "kategori",
+      required: true,
     },
   },
   {

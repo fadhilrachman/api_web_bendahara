@@ -3,6 +3,7 @@ import db from "./database/index.js";
 import userRouter from "./api/user/router";
 import pemasukanRouter from "./api/pemasukan/router";
 import pengeluaranRouter from "./api/pengeluaran/router";
+import kategoriRouter from "./api/kategori/router";
 import cors from "cors";
 const app = express();
 
@@ -15,6 +16,7 @@ db.on("open", () => {
   app.use(userRouter);
   app.use(pemasukanRouter);
   app.use(pengeluaranRouter);
+  app.use(kategoriRouter);
 });
 
 db.on("error", () => {

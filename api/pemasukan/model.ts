@@ -14,9 +14,9 @@ const pemasukanSchema = new mongoose.Schema(
       type: String,
     },
     kategori: {
-      type: String,
-      enum: ["primary", "gift"],
-      requred: true,
+      type: mongoose.Types.ObjectId,
+      ref: "kategori",
+      required: true,
     },
   },
   {
