@@ -44,6 +44,8 @@ export const getAllData = async (
   }
   try {
     const data = await Pemasukan.find(filter)
+      .select("-__v")
+      .populate({ path: "kategori" })
       .sort({ tanggal: -1 })
       .skip((page - 1) * limit)
       .limit(limit)

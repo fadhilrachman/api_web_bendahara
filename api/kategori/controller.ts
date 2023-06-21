@@ -70,4 +70,16 @@ const deleteData = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { getAllData, createData, updateData, deleteData };
+const getOneData = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params;
+
+  try {
+    const data = await Kategori.findById(id);
+    if (!data) return res.status(404).json({ message: "id not found" });
+    res.status(201).json({ message: "succes get data", data });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { getAllData, createData, updateData, deleteData, getOneData };
