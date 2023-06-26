@@ -1,12 +1,12 @@
-import Pemasukan from "./model";
+import Article from "./model";
 import { Request, Response, NextFunction } from "express";
 import { responGet, responCreate } from "../../utils/respon";
 import createPagination from "../../utils/pagination";
 
 interface ReqBody {
   tanngal: string;
-  total_pemasukan: number;
-  deskripsi: string;
+  judul: string;
+  link: string;
   kategori: string;
 }
 
@@ -35,7 +35,7 @@ export const getAllData = async (
       filter.tanggal = { $gte: startDate, $lte: endDate };
       break;
     case !!search:
-      filter.deskripsi = { $regex: search, $options: "i" };
+      filter.judul = { $regex: search, $options: "i" };
       break;
     case !!kategori:
       filter.kategori = kategori;
@@ -43,17 +43,16 @@ export const getAllData = async (
     default:
       break;
   }
-  console.log(req.query);
 
   try {
-    const data = await Pemasukan.find(filter)
+    const data = await Article.find(filter)
       .select("-__v")
       .populate({ path: "kategori" })
       .sort({ tanggal: -1 })
       .skip(page && (page - 1) * limit)
       .limit(limit)
       .lean();
-    const count = await Pemasukan.count(filter);
+    const count = await Article.count(filter);
     const total_page = Math.ceil(count / limit);
 
     const pagination = createPagination(page, total_page, limit);
@@ -70,7 +69,7 @@ export const createData = async (
   next: NextFunction
 ) => {
   try {
-    const data = await Pemasukan.create(req.body);
+    const data = await Article.create(req.body);
     responCreate(res, 200, "succes create data", data);
   } catch (error) {
     next(error);
@@ -84,7 +83,7 @@ export const updateData = async (
 ) => {
   const { id } = req.params;
   try {
-    const data = await Pemasukan.findByIdAndUpdate(id, req.body, { new: true });
+    const data = await Article.findByIdAndUpdate(id, req.body, { new: true });
     if (!data) return res.status(404).json({ message: "id error" });
     responCreate(res, 200, "succes update data", data);
   } catch (error) {
@@ -99,7 +98,7 @@ export const deleteData = async (
 ) => {
   const { id } = req.params;
   try {
-    const data = await Pemasukan.findByIdAndDelete(id);
+    const data = await Article.findByIdAndDelete(id);
     if (!data) return res.status(404).json({ message: "id error" });
     responCreate(res, 200, "succes delete data", data);
   } catch (error) {
@@ -114,7 +113,7 @@ export const getOneData = async (
   const { id } = req.params;
 
   try {
-    const data = await Pemasukan.findById(id);
+    const data = await Article.findById(id);
     if (!data) return res.status(404).json({ message: "id not found" });
     res.status(201).json({ message: "succes get data", data });
   } catch (error) {

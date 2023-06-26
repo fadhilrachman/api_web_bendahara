@@ -3,8 +3,9 @@ interface Pagination {
   current_page: number | null;
   next: number;
   previoes: number;
+  limit?: number;
 }
-const createPagination = (page: number, total_page: number) => {
+const createPagination = (page: number, total_page: number, limit: number) => {
   let previoes: any;
   let next: any;
   if (page <= total_page) {

@@ -9,10 +9,10 @@ import {
 // import from "../../utils/middleware";
 const router = express();
 
-router.get("/income", getAllData);
-router.post("/income", createData);
-router.put("/income/:id", updateData);
-router.get("/income/:id", getOneData);
-router.delete("/income/:id", deleteData);
+router.get("/article", getAllData);
+router.post("/article", createData);
+router.put("/article/:id", updateData);
+router.get("/article/:id", getOneData);
+router.delete("/article/:id", deleteData);
 
 export default router;

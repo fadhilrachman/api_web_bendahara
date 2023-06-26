@@ -40,7 +40,7 @@ const createData = async (
 
     const checkEmail = await User.findOne({ email });
     if (checkEmail)
-      return res.status(400).json({ message: "email sudah terdaftar" });
+      return res.status(400).json({ message: "Email already registered" });
     const salt = bcrypt.genSaltSync(10);
     const bcryptPassword = bcrypt.hashSync(password, salt);
     const data = await User.create({
@@ -61,7 +61,7 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
     const checkUser = await User.findOne({ email });
 
     if (!checkUser)
-      return res.status(404).json({ message: "email belum terdaftar" });
+      return res.status(404).json({ message: "Email not registered" });
 
     bcrypt.compare(password, checkUser?.password, async (err, isMatch) => {
       console.log({ isMatch });
@@ -73,15 +73,12 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
           "aaofnasfasd.1ef.24tredr4t2redc42te",
           { expiresIn: "1d" }
         );
-        const user = await User.findOneAndUpdate(
-          { email },
-          { token },
-          { new: true }
-        );
 
+        await User.findOneAndUpdate({ email }, { token }, { new: true });
+        res.cookie("token", token);
         res.json({ message: "login success", token });
       } else {
-        res.status(400).json({ message: "password atau email salah" });
+        res.status(400).json({ message: "Incorrect password or e-mail" });
       }
     });
   } catch (error) {

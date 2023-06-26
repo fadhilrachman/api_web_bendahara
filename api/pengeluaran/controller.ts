@@ -50,7 +50,7 @@ export const getAllData = async (
     const count = await Pengeluaran.count(filter);
     const total_page = Math.ceil(count / limit);
 
-    const pagination = createPagination(page, total_page);
+    const pagination = createPagination(page, total_page, limit);
 
     responGet(res, 200, "succes get data", data, count, pagination);
   } catch (error) {

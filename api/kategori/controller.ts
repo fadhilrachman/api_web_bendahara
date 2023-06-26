@@ -30,7 +30,7 @@ const getAllData = async (
       "succes get data",
       data,
       count,
-      createPagination(page, total_page)
+      createPagination(page, total_page, limit)
     );
   } catch (error) {
     next(error);
